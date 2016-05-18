@@ -1,0 +1,4 @@
+#Sample Celera 8.3 .spec file with default (no large genome/diploid) parameters 
+
+merSize=16
+mhap=-k 14 --num-hashes 1024 --num-min-matches 3 --threshold 0.04

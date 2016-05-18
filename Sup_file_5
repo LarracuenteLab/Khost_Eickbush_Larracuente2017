@@ -1,0 +1,29 @@
+#!/bin/bash
+#SBATCH -J MHAP_blasr-corr
+#SBATCH -e MHAP_blasr-corr_err
+#SBATCH -o MHAP_blasr-corr_out
+#SBATCH --mem-per-cpu=5000
+#SBATCH -t 720:00:00
+#SBATCH -c 24
+#SBATCH -p charlesworths --qos charlesworths
+#SBATCH --mail-type=ALL
+
+#sample slurm script to run Celera 8.3 on corrected reads using Bluehive cluster 
+
+#run in directory containing the corrected reads
+module load wgs/8.3 java/1.8.0 bowtie2/2.2.1 bioperl/1.6.922
+
+#fastqSample script wants reads file name as .u.fastq for some reason...
+ln -s dros_corrected.fastq dros_corrected.u.fastq
+
+#sample the longest 25X subset from corrected reads
+/gpfs/fs1/sfw/wgs/8.3/Linux-amd64/bin/fastqSample -U -I dros_corrected -O dros_corrected.longest25 -c 25 -g 180000000 -max
+
+#change longest 25X reads file name back to normal
+mv dros_corrected.longest25.u.fastq dros_corrected.longest25.fastq
+
+#convert longest 25X fastq to frg
+/gpfs/fs1/sfw/wgs/8.3/Linux-amd64/bin/fastqToCA -libraryname dros_corrected -technology pacbio-corrected -type sanger -reads /scratch/alarracu_lab/dmel_blasr-corr_celera8.3/dros_corrected.longest25.fastq > /scratch/alarracu_lab/dmel_blasr-corr_celera8.3/dros_corrected.longest25.frg
+
+#assemble with runCA
+/gpfs/fs1/sfw/wgs/8.3/Linux-amd64/bin/runCA -s /scratch/alarracu_lab/dmel_blasr-corr_celera8.3/blasr-corr_celera8.3.spec -p dros_corrected -d dros_corrected /scratch/alarracu_lab/dmel_blasr-corr_celera8.3/dros_corrected.longest25.frg
