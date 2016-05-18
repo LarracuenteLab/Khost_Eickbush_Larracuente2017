@@ -25,3 +25,7 @@ https://s3.amazonaws.com/datasets.pacb.com/2014/Drosophila/reads/dmel_FALCON_dip
 Celera 8.1 PBcR haploid Blasr quivered assembly
 https://s3.amazonaws.com/datasets.pacb.com/2014/Drosophila/reads/dmel_haploid_assembly.tgz
 
+Celera 8.2 MHAP assembly from:
+ Berlin K, Koren S, Chin CS, Drake JP, Landolin JM, Phillippy AM. Assembling large genomes with single-molecule sequencing and locality-sensitive hashing. Nat Biotechnol. 2015;33(6):623-30. doi: 10.1038/nbt.3238. PubMed PMID: 26006009.
+
+Accession GCA_000778455
