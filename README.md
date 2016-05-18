@@ -29,3 +29,14 @@ Celera 8.2 MHAP assembly from:
  Berlin K, Koren S, Chin CS, Drake JP, Landolin JM, Phillippy AM. Assembling large genomes with single-molecule sequencing and locality-sensitive hashing. Nat Biotechnol. 2015;33(6):623-30. doi: 10.1038/nbt.3238. PubMed PMID: 26006009.
 
 Accession GCA_000778455
+
+#Description of supplementary files
+S1: Sample Celera 8.3 MHAP specification file, with default small/haploid genome parameters. Parameters altered in this study were merSize, -k, --num-hashes, and assembleCoverage.
+S2: Sample Celera 8.3 MHAP specification file, with large/diploid genome parameters. Parameters altered in this study were merSize, -k, --num-hashes, and assembleCoverage.
+S3: Sample SLURM job handler file used to run MHAP on Bluehive computing cluster at University of Rochester. Other job handlers should use appropriate syntax.
+S4: Ppecification file used to run Celera 8.3 assembler on PacBio reads corrected using Celera 8.1 (BLASR-corrected).
+S5: SLURM job handler file used to to run Celera 8.3 assembler on PacBio reads corrected using Celera 8.1 (BLASR-corrected) on Bluehive. Script first subsamples the longest 25X reads from the corrected reads, converts these to an .frg file, then calls the runCA assembler. Note: this script did not appear to properly allocate resources on our cluster, resulting in a long (~17 days) assembly time. Configured properly, assembly should be much faster.
+S6: GFF (v2) annotation file for the Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+S7: GFF (v2) annotation file for the 260-bp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+S8: Custom Repbase repeat library used to annotate assemblies. 
+S9: Sample specification file used for Falcon assemblies. Parameters altered in this study were -min_cov and -min_len.
