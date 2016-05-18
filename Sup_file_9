@@ -1,7 +1,0 @@
-set -vex
-source /gpfs/fs2/scratch/dkhost/FALCON-integrate/fc_env/bin/activate
-fc_ovlp_filter.py --db /gpfs/fs2/scratch/dkhost/dmel_FALCON_0.3_assembly/1-preads_ovl/preads.db --fofn /scratch/alarracu_lab/dmel_FALCON_assemblies/las.fofn --max_diff 100 --max_cov 100 --min_cov 15 --bestn 10 --n_core 8 --min_len 5000 > preads.ovl
-ln -sf /gpfs/fs2/scratch/dkhost/dmel_FALCON_0.3_assembly/1-preads_ovl/preads4falcon.fasta .
-fc_ovlp_to_graph.py preads.ovl --min_len 5000 > fc_ovlp_to_graph.log
-fc_graph_to_contig.py
-touch falcon_asm_done
