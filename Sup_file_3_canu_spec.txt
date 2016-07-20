@@ -1,0 +1,4 @@
+MhapMerSize=14
+MhapSensitivity=high
+
+errorRate=0.04
