@@ -53,4 +53,4 @@ S10: GFF (v3) annotation file for the major Rsp locus in the PBcR-BLASR assembly
 
 S11: GFF (v3) annotation file for the 260-bp locus in the PBcR-BLASR assembly, constructed using custom scripts.
 
-S11: GFF (v3) annotation file for the minor Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+S12: GFF (v3) annotation file for the minor Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
