@@ -1,0 +1,201 @@
+#!/usr/bin/perl
+#use warnings;
+use strict;
+
+#Script used to convert blast output to GFF file
+#Run as follows: perl blast_to_GFF.pl infile.blast
+#Note: blast input should only be for a single contig
+
+my $blast=$ARGV[0];
+
+my %initial;
+open(BLAST,$blast);
+while(<BLAST>) { 
+	chomp $_;
+	my @array=split("\t",$_);
+	my $left; my $right;
+	if($array[8]<$array[9]) {
+		$left = $array[8];
+		$right = $array[9];
+	}
+	elsif($array[9]<$array[8]) {
+		$left = $array[9];
+		$right = $array[8];
+	}
+
+	#check blast score against known max score for L and R; assign variant or hybrid based on this
+	#max R score: 100% match, full length = 217
+	my $maxR=217;
+	#max L score: 100% match, full length = 215
+	my $maxL=215;
+	#if hit is a Rsp element
+	if($array[0] =~ m/R_Rsp/ || $array[0] =~ m/L_Rsp/) {
+		#if RSP hit is full length
+		if($array[3] >= 90) {
+			#now specifically if R		
+			if($array[0] =~ m/R_Rsp/) {
+				#if >= 90% similar to R, define as R (i.e. do nothing)
+				if($array[11]>=($maxR*0.7)) {
+					$array[0]=$array[0];
+				}
+				#if < 85% similar to both, define as variant
+				elsif($array[11] < ($maxR*0.7)) {
+					$array[0]="Rsp.RSP_VARIANT.D_melanogaster";
+				}
+			}
+
+			elsif($array[0] =~ m/L_Rsp/) {
+				#if >= 90% similar to L, define as L (i.e. do nothing)
+				if($array[11]>=($maxL*0.7)) {
+					$array[0]=$array[0];
+				}
+				#if < 85% similar, define as variant
+				elsif($array[11] < ($maxL*0.7)) {
+					$array[0]="Rsp.RSP_VARIANT.D_melanogaster";
+				}
+			}
+		}
+		#else if hit is shorter than 90bp
+		elsif($array[3] < 90) {
+			$array[0]="Rsp.RSP_TRUNC.D_melanogaster";
+		}
+	}
+
+	my $id=join("\t",@array);
+
+	#see if already a hash entry with these exact coords
+	if(exists($initial{$array[1]}{"$left.$right"})) {
+		my $existing=$initial{$array[1]}{"$left.$right"};
+		my @existing=split("\t",$existing);
+		#if better than what is already in array
+		if($array[11] > $existing[11]) {
+			delete($initial{$array[1]}{"$left.$right"});
+			$initial{$array[1]}{"$left.$right"}=$id;
+	#		print "$existing[0] $array[0]\n"
+		}
+		elsif($array[11] < $existing[11]) {
+			next;
+		}
+	}
+	else {
+		$initial{$array[1]}{"$left.$right"}=$id;
+	}
+}
+
+
+#foreach my $key (keys %initial) {
+#	foreach my $key2 (sort {$a<=>$b} keys %{ $initial{$key} }) {
+#		my $value = $initial{$key}{$key2};
+#		print "$key\t$key2\t$value\n";
+#	}
+#}
+#print "\n";
+
+
+my %final;
+my $cur_left;
+my $cur_right;
+open(BLAST,$blast);
+while(<BLAST>) {
+	chomp $_;
+	my @hit=split("\t",$_);
+	#get coords of current hit
+	my $left; my $right;
+	if($hit[8]<$hit[9]) {
+		$cur_left = $hit[8];
+		$cur_right = $hit[9];
+	}
+	elsif($hit[9]<$hit[8]) {
+		$cur_left = $hit[9];
+		$cur_right = $hit[8];
+	}
+
+	#boolean to track whether overlapped hits
+	my $bool=0;
+
+	#use the contig ID from blast output to query hash
+	foreach my $target (sort {$a<=>$b} keys %{ $initial{$hit[1]} }) {
+		my @tar_coords=split(/\./,$target);
+		my $tar_left=$tar_coords[0];
+		my $tar_right=$tar_coords[1];
+
+		my $tar_value=$initial{$hit[1]}{$target};
+		my @tar=split("\t",$tar_value); #actual data for the blast hit, stored in initial array
+
+		#make sure no self compare
+		if($cur_left == $tar_left && $cur_right == $tar_right) {
+	#		print "same\n";
+			my $existing=$initial{$hit[1]}{"$cur_left.$cur_right"};
+			
+			next;
+		}
+
+		#overlaps...(5 is some arbitrary number to allow for slight overlaps
+		elsif($cur_left >= $tar_left && $cur_left < $tar_right-5) { 
+	#		print "$cur_left $cur_right overlaps $tar_left $tar_right\n";
+
+			#current hit is better
+			if($hit[11] > $tar[11]) {
+	#			print "\t$cur_left $cur_right $hit[11] is better than $tar_left $tar_right $tar[11]\n";
+				
+				delete($initial{$hit[1]}{"$tar_left.$tar_right"});
+				#get rid of entry if already in final hash??
+				
+			}
+			#target hit is better
+			elsif($hit[11] < $tar[11]) {
+	#			print "\t$cur_left $cur_right $hit[11] is WORSE than $tar_left $tar_right $tar[11]\n";
+				
+
+				delete($initial{$hit[1]}{"$cur_left.$cur_right"});		
+			}
+		}
+	}
+}
+
+
+
+#QC STUFF################################################################
+#foreach my $key (keys %initial) {
+#	foreach my $key2 (sort {$a<=>$b} keys %{ $initial{$key} }) {
+#		my $value = $initial{$key}{$key2};
+#		print "$key\t$key2\t$value\n";
+#	}
+#}
+
+#foreach my $key (keys %final) {
+#	foreach my $key2 (sort {$a<=>$b} keys %{ $final{$key} }) {
+#		my $value = $final{$key}{$key2};
+#		print "$key\t$key2\t$value\n";
+#	}
+#}
+##########################################################################
+
+
+
+
+foreach my $chrom (keys %initial) {
+	foreach my $coords (sort {$a<=>$b} keys %{$initial{$chrom}}) {
+		#prints: contig, feature name, feature family, left coord, right coord, strand
+		my $value2=$initial{$chrom}{$coords};
+		my @coords=split(/\./,$coords);
+		my @info=split("\t",$value2);
+		my @temp=split(/\./,$info[0]);
+
+		my $strand;
+		if ($info[8] > $info[9]) {
+			$strand = "-";
+		}
+		elsif ($info[8] < $info[9]) {
+			$strand = "+";
+		}
+
+		#print "$chrom\t$info[0]\t$temp[1]\t$coords[0]\t$coords[1]\t$strand\n";
+		#prints like gff2/gtf
+		#contig source feature start end score(blast) strand frame attribute
+		print "$chrom\tpacbio\t$temp[1]\t$coords[0]\t$coords[1]\t$info[11]\t$strand\t.\t$info[0]\n"
+	}
+}
+
+
+
