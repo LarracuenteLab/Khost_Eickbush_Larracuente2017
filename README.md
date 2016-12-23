@@ -35,16 +35,22 @@ S1: Sample Celera 8.3 MHAP specification file, with default small/haploid genome
 
 S2: Sample Celera 8.3 MHAP specification file, with large/diploid genome parameters. Parameters altered in this study were merSize, -k, --num-hashes, and assembleCoverage.
 
-S3: Sample SLURM job handler file used to run MHAP on Bluehive computing cluster at University of Rochester. Other job handlers should use appropriate syntax.
+S3: Sample SLURM job handler file used to run Canu assembler
 
-S4: Ppecification file used to run Celera 8.3 assembler on PacBio reads corrected using Celera 8.1 (BLASR-corrected).
+S4: Specification file used to run FALCON
 
-S5: SLURM job handler file used to to run Celera 8.3 assembler on PacBio reads corrected using Celera 8.1 (BLASR-corrected) on Bluehive. Script first subsamples the longest 25X reads from the corrected reads, converts these to an .frg file, then calls the runCA assembler. Note: this script did not appear to properly allocate resources on our cluster, resulting in a long (~17 days) assembly time. Configured properly, assembly should be much faster.
+S5: SLURM job handler file used to to run Celera 8.3 assembler
 
-S6: GFF (v2) annotation file for the Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+S6: Spec file used to construct BLASR-corr Cel8.3 assembly
 
-S7: GFF (v2) annotation file for the 260-bp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+S7: SLURM script used to construct BLASR-corr Cel8.3 assembly. Note: this script did not appear to properly allocate resources on our cluster, resulting in a long (~17 days) assembly time. Configured properly, assembly should be much faster.
 
 S8: Custom Repbase repeat library used to annotate assemblies. 
 
-S9: Sample specification file used for Falcon assemblies. Parameters altered in this study were -min_cov and -min_len.
+S9: Perl script used to annotate assembly from BLAST output
+
+S10: GFF (v3) annotation file for the major Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+
+S11: GFF (v3) annotation file for the 260-bp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+
+S11: GFF (v3) annotation file for the minor Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
