@@ -1,16 +1,47 @@
-#!/bin/bash
-#SBATCH -J PBcR_MHAP
-#SBATCH -e PBcR_MHAP_err
-#SBATCH -o PBcR_MHAP_out
-#SBATCH --mem-per-cpu=8000
-#SBATCH -t 120:00:00
-#SBATCH -c 24
-#SBATCH -p standard
-#SBATCH --mail-type=ALL
+#spec file to run Celera 8.3 on corrected reads 
 
-
-#sample file to run PBcR in Celera 8.3 on Bluehive cluster using slurm job manager 
-module load wgs/8.3 java/1.8.0 bowtie2/2.2.1 bioperl/1.6.922
-
-
-PBcR -length 500 -partitions 200 -l dmel_pacbio -s /scratch/alarracu_lab/dmel_MHAP_array/14_1500.params -fastq /scratch/dkhost/bergman_pacbio_reads/pacbio_reads_vs_celera25X_filtered+BLASR/data/filtered_subreads.fastq genomeSize=180000000 > run.out 2>&1
+gridEngineJobID = JOB_ID
+ovlRefBlockLength = 100000000000
+utgErrorLimit = 6.5
+gridEngineNameOption = -cwd -N
+ovlHashBlockLength = 1000000000
+gridEngineHoldOption = -hold_jid "WAIT_TAG"
+unitigger = bogart
+utgErrorRate = 0.25
+gridOptionsOverlap = -pe threads 16 -l mem=2GB
+utgGraphErrorRate = 0.05
+gridEngineSyncOption = -sync y
+gridEngineArrayOption = -t ARRAY_JOBS
+useGrid = 0
+gridOptionsConsensus = -pe threads 16
+gridOptionsScript = -pe threads 1
+gridEngineOutputOption = -j y -o
+frgMinLen = 200
+ovlErrorRate = 0.25
+gridEnginePropagateCommand = qalter -hold_jid "WAIT_TAG"
+gridEngineArraySubmitID = $TASK_ID
+gridEngineTaskID = SGE_TASK_ID
+cnsMinFrags = 1000
+cgwErrorRate = 0.25
+gridEngineNameToJobIDCommand = 
+doOverlapBasedTrimming = 0
+gridEngineArrayName = ARRAY_NAME
+ovlStoreMemory = 32000
+merylThreads = 24
+utgMergeErrorRate = 0.05
+utgGraphErrorLimit = 0
+cnsErrorRate = 0.25
+doFragmentCorrection = 1
+shell = /bin/bash
+ovlRefBlockSize = 0
+ovlHashLoad = 0.80
+scriptOnGrid = 0
+gridEngineSubmitCommand = qsub
+gridOptions = 
+merSize = 14
+ovlHashBits = 24
+doUnitigSplitting = 0
+utgMergeErrorLimit = 0
+merylMemory = 32000
+ovlThreads = 24
+ovlConcurrency = 1
