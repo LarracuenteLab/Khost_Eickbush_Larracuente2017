@@ -31,26 +31,28 @@ Celera 8.2 MHAP assembly from:
 Accession GCA_000778455
 
 #Description of supplementary files
-S1: Sample Celera 8.3 MHAP specification file, with default small/haploid genome parameters. Parameters altered in this study were merSize, -k, --num-hashes, and assembleCoverage.
+File S1: Sample Celera 8.3 MHAP specification file, with default small/haploid genome parameters. Parameters altered in this study were merSize, -k, --num-hashes, and assembleCoverage.
 
-S2: Sample Celera 8.3 MHAP specification file, with large/diploid genome parameters. Parameters altered in this study were merSize, -k, --num-hashes, and assembleCoverage.
+File S2: Sample Celera 8.3 MHAP specification file, with large/diploid genome parameters. Parameters altered in this study were merSize, -k, --num-hashes, and assembleCoverage.
 
-S3: Sample SLURM job handler file used to run Canu assembler
+File S3: Sample specification file used to run Canu assembler with 4% error rate
 
-S4: Specification file used to run FALCON
+File S4: Sample specification file used to run FALCON
 
-S5: SLURM job handler file used to to run Celera 8.3 assembler
+File S5: Spec file used to construct BLASR-corr Cel8.3 assembly
 
-S6: Spec file used to construct BLASR-corr Cel8.3 assembly
+File S6: SLURM script used to construct BLASR-corr Cel8.3 assembly. Note: this script did not appear to properly allocate resources on our cluster, resulting in a long (~17 days) assembly time. Configured properly, assembly should be much faster.
 
-S7: SLURM script used to construct BLASR-corr Cel8.3 assembly. Note: this script did not appear to properly allocate resources on our cluster, resulting in a long (~17 days) assembly time. Configured properly, assembly should be much faster.
+File S7: SLURM file used to run Canu 1.2 using BLASR corrected reads (Canu-corr assembly). This uses the default Canu settings but skips read correction.
 
-S8: Custom Repbase repeat library used to annotate assemblies. 
+File S8: SLURM job handler file used to to run Celera 8.3 assembler
 
-S9: Perl script used to annotate assembly from BLAST output
+File S9: Custom Repbase repeat library used to annotate assemblies. 
 
-S10: GFF annotation file for the major Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+File S10: Perl script used to annotate assembly from BLAST output
 
-S11: GFF annotation file for the 260-bp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+File S11: GFF annotation file for the major Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
 
-S12: GFF annotation file for the minor Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
+File S12: GFF annotation file for the 1.688 loci in the PBcR-BLASR assembly, constructed using custom scripts.
+
+File S13: GFF annotation file for the minor Rsp locus in the PBcR-BLASR assembly, constructed using custom scripts.
